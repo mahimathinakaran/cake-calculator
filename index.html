@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Shop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="shop-header">
+        <h1>CAKE SHOP</h1>
+    </header>
+
+    <div class="cake-display">
+        <div class="cake-item">
+            <img src="https://via.placeholder.com/150" alt="Rainbow Cake">
+            <p>Rainbow Cake - Rs. 300</p>
+        </div>
+        <div class="cake-item">
+            <img src="https://via.placeholder.com/150" alt="Chocolate Cake">
+            <p>Chocolate Cake - Rs. 200</p>
+        </div>
+        <div class="cake-item">
+            <img src="https://via.placeholder.com/150" alt="Red Velvet Cake">
+            <p>Red Velvet Cake - Rs. 250</p>
+        </div>
+        <div class="cake-item">
+            <img src="https://via.placeholder.com/150" alt="Black Forest Cake">
+            <p>Black Forest Cake - Rs. 350</p>
+        </div>
+    </div>
+
+    <main class="order-section">
+        <h2>Order Cake</h2>
+        <div class="order-form">
+            <label for="rainbow-qty">Rainbow Cake (Quantity)</label>
+            <input type="number" id="rainbow-qty" value="0" min="0"><br><br>
+
+            <label for="chocolate-qty">Chocolate Cake (Quantity)</label>
+            <input type="number" id="chocolate-qty" value="0" min="0"><br><br>
+
+            <label for="redvelvet-qty">Red Velvet Cake (Quantity)</label>
+            <input type="number" id="redvelvet-qty" value="0" min="0"><br><br>
+
+            <label for="blackforest-qty">Black Forest Cake (Quantity)</label>
+            <input type="number" id="blackforest-qty" value="0" min="0"><br><br>
+
+            <button onclick="calculateBill()">Place Order</button>
+
+            <h3 id="total-price-display"></h3>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
