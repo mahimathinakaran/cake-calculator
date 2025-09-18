@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.shop-header {
+    background-color: #8B0000;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.cake-display {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.cake-item {
+    text-align: center;
+}
+
+.cake-item img {
+    width: 150px;
+    height: 150px;
+    border: 1px solid #ccc;
+}
+
+.order-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.order-form input {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#total-price-display {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
