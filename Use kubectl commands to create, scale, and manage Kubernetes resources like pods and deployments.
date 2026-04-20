@@ -1,0 +1,62 @@
+1. start kubernetes : 
+minikube start
+
+2. create deployment : 
+kubectl create deployment myapp --image=nginx:latest
+
+check deployment : kubectl get deployments
+kubectl get pods
+
+3. scale deployment 
+scale to 3 replicas : kubectl scale deployment myapp --replicas=3
+
+check pods : kubectl get pods
+
+scale back to 1 : 
+kubectl scale deployment myapp --replicas=1
+
+4. Expose + inspect : 
+expose service : kubectl expose deployment myapp --port=80 --type=NodePort
+
+check services : 
+kubectl get services
+
+describe pod : 
+kubectl describe pod <pod-name>
+
+view logs: kubectl logs <pod-name>
+
+5. clean up : 
+kubectl delete deployment myapp
+kubectl delete service myapp
+
+6. YAML : create file : deployment.yaml
+code: 
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: myapp
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: myapp
+
+  template:
+    metadata:
+      labels:
+        app: myapp
+
+    spec:
+      containers:
+        - name: myapp
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+
+apply yaml : kubectl apply -f deployment.yaml
+
+check everything : kubectl get all
