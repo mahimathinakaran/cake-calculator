@@ -1,0 +1,100 @@
+1. start jenkins container : (terminal ) 
+docker volume create jenkins-data
+
+docker run -d \
+--name jenkins \
+-p 8080:8080 -p 50000:50000 \
+-v jenkins-data:/var/jenkins_home \
+-v /var/run/docker.sock:/var/run/docker.sock \
+jenkins/jenkins:lts
+
+2. get admin password : 
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+open browser: http://localhost:8080
+
+3. Install Docker inside Jenkins :
+docker exec -u root jenkins bash -c \
+"apt-get update && apt-get install -y docker.io"
+
+4. in github, create file: Jenkins file 
+code : 
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "myapp"
+        DOCKER_HUB_USER = "<your-dockerhub-username>"
+    }
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/<username>/<repo>.git'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t $DOCKER_HUB_USER/$IMAGE_NAME:latest .'
+            }
+        }
+
+        stage('Push to Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker push $DOCKER_HUB_USER/$IMAGE_NAME:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'docker run -d -p 5000:5000 $DOCKER_HUB_USER/$IMAGE_NAME:latest'
+            }
+        }
+    }
+}
+
+
+5. push code to github
+git add .
+git commit -m "add Jenkinsfile"
+git push
+
+6. add docker hub credentials in jenkins 
+Jenkins UI:
+
+Go to Manage Jenkins
+Click Credentials
+Add new credentials:
+
+Fill:
+
+Username → Docker Hub username
+Password → Docker Hub password
+ID → dockerhub-creds
+
+7. create pipeline job:
+enkins dashboard:
+
+Click New Item
+Name: devops-pipeline
+Select Pipeline
+
+8. connect github repo 
+Select Pipeline script from SCM
+SCM → Git
+Enter repo URL
+
+9. run pipeline 
+click build now 
