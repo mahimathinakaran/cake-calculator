@@ -1,0 +1,28 @@
+1. clone repository : git clone https://github.com/<username>/<repo-name>.git
+
+go inside folder : 
+cd <repo-name>
+
+2. modify file : 
+echo "Updated content" >> README.md
+
+3. view updated files : 
+cat README.md
+
+4. see changes : 
+git diff
+
+5. Commit and push : 
+add file : 
+git add README.md
+
+commit changes: 
+git commit -m "docs: update README with new content"
+
+push to github: 
+git push origin main
+
+check commits : 
+git log --oneline -3
+
+
