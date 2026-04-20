@@ -1,0 +1,60 @@
+1. create folder : mkdir monolithic-app
+cd monolithic-app
+
+2. create app.py : from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+students = {}
+next_id = 1
+
+# GET all students
+@app.route('/students', methods=['GET'])
+def get_students():
+    return jsonify(list(students.values()))
+
+# ADD student
+@app.route('/students', methods=['POST'])
+def add_student():
+    global next_id
+    data = request.get_json()
+
+    student = {
+        'id': next_id,
+        'name': data['name'],
+        'roll': data['roll']
+    }
+
+    students[next_id] = student
+    next_id += 1
+
+    return jsonify(student), 201
+
+# DELETE student
+@app.route('/students/<int:sid>', methods=['DELETE'])
+def delete_student(sid):
+    students.pop(sid, None)
+    return jsonify({'msg': 'Deleted'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+3. install flask : 
+pip install flask
+
+4. run the app : 
+python app.py
+
+5. test using curl : 
+add a student : 
+curl -X POST http://localhost:5000/students \
+-H "Content-Type: application/json" \
+-d '{"name":"Alice","roll":"CS001"}'
+
+view a student : 
+curl http://localhost:5000/students
+
+delete a student : 
+curl -X DELETE http://localhost:5000/students/1
+
+
