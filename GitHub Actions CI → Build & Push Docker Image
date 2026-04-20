@@ -1,0 +1,93 @@
+1. create project folder : 
+mkdir ci-app
+cd ci-app
+
+2. create file app.py : 
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from CI Pipeline!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+3. create requirements.txt :
+flask 
+
+4. create dockerfile :
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+
+5. initialize and push git :
+git init
+git add .
+git commit -m "initial commit"
+git branch -M main
+git remote add origin <your-repo-link>
+git push -u origin main
+
+6. add docker hub secrets: 
+Go to GitHub:
+
+Open repo
+Click Settings
+Click Secrets and variables → Actions
+Click New repository secret
+
+Add:
+🔐 DOCKER_USERNAME → your Docker Hub username
+🔐 DOCKER_PASSWORD → your Docker Hub password/token
+
+7. create workflow folder : mkdir -p .github/workflows
+
+8. create workflow file : touch .github/workflows/docker-publish.yml
+9. inside the file : name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/python-app:latest .
+
+      - name: Push to Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/python-app:latest
+
+10. push workflow: 
+git add .
+git commit -m "add CI workflow"
+git push
+
+11. check output
+Go to GitHub:
+
+Click Actions tab
+
